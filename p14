@@ -1,0 +1,67 @@
+import java.util.Scanner;
+
+/* D: towar, cena, liczba
+ * Sz: uporzadkowanie wg wartosci
+ *     filtr cena (min,max)
+ */
+public class p14 {
+
+	public static class Elem{
+		String towar;
+		int cena,liczba;
+		Elem nast;
+		public Elem(Elem lista,String towar,int cena,int liczba){
+			this.towar=towar;
+			this.cena=cena;
+			this.liczba=liczba;
+			nast=lista;
+		}
+		public static Elem dodaj(Elem lista,String towar,int cena,int liczba){
+			return new Elem(lista, towar, cena, liczba);
+		}
+		public static Elem wstaw(Elem lista,String towar,int cena,int liczba){
+			if(lista==null)
+				return Elem.dodaj(lista, towar, cena, liczba);
+			if((lista.cena*lista.liczba>cena*liczba) ||
+					((lista.cena*lista.liczba==cena*liczba) &&
+					lista.towar.compareTo(towar)>0))
+				return Elem.dodaj(lista, towar, cena, liczba);
+			lista.nast=Elem.wstaw(lista.nast, towar, cena, liczba);
+			return lista;
+		}
+		public static void wypisz(Elem lista,int min,int max){
+			while(lista!=null){
+				if(lista.cena>=min && lista.cena<=max)
+					System.out.printf("%-12s %3d %3d %6d\n",
+						lista.towar,lista.cena,lista.liczba,
+						lista.cena*lista.liczba);
+				lista=lista.nast;
+			}
+		}
+		public static void usun(Elem lista){
+			while(lista!=null){
+				Elem q=lista.nast;
+				lista.towar=null;
+				lista.nast=null;
+				lista=q;
+			}
+		}
+	}
+	public static void main(String[] args) {
+		Elem lista=null;
+		lista=Elem.wstaw(lista, "mleko", 4, 9);
+		lista=Elem.wstaw(lista, "ser", 5, 8);
+		lista=Elem.wstaw(lista, "kefir", 6, 7);
+		lista=Elem.wstaw(lista, "chleb", 7, 6);
+		lista=Elem.wstaw(lista, "gazeta", 8, 5);
+		int mincena, maxcena;
+		Scanner in=new Scanner(System.in);
+		System.out.print("min=");
+		mincena=in.nextInt();
+		System.out.print("max=");
+		maxcena=in.nextInt();
+		Elem.wypisz(lista,mincena,maxcena);
+		Elem.usun(lista);
+	}
+
+}
