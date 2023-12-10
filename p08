@@ -1,0 +1,52 @@
+import java.util.Random;
+
+
+public class p08 {
+
+	static class Elem{
+		int dana;
+		Elem nast;
+		public Elem(Elem lista,int x){
+			dana=x;
+			nast=lista;
+		}
+		public static Elem dodaj(Elem lista,int x){
+			return new Elem(lista,x);
+		}
+		public static Elem wstaw(Elem lista,int x){
+			if(lista==null)
+				return Elem.dodaj(lista, x);
+			if(lista.dana<x)
+				return Elem.dodaj(lista, x);
+			lista.nast=wstaw(lista.nast,x);
+			return lista;
+		}
+		public static void wypisz(Elem lista){
+			while(lista!=null){
+				System.out.print(lista.dana+", ");
+				lista=lista.nast;
+			}
+		}
+		public static void wypisz2(Elem lista){
+			if(lista.nast!=null)
+				wypisz2(lista.nast);
+			System.out.print(lista.dana+", ");
+		}
+		public static void usun(Elem lista) {
+			while(lista!=null){
+				Elem q=lista.nast;
+				lista.nast=null;
+				lista=q;
+			}
+		}
+	}
+	public static void main(String[] args) {
+		Elem lista=null;
+		Random r=new Random();
+		for(int i=0;i<10;i++)
+			lista=Elem.dodaj(lista, r.nextInt(10));
+		Elem.wypisz(lista);
+		Elem.usun(lista);
+	}
+
+}
