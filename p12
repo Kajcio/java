@@ -1,0 +1,63 @@
+import java.util.Scanner;
+
+/* D: D: String
+ * Sz: wszystkie podzbiory dwuelemnowe skladajace sie ze znakow roznych od spacji
+ * ala ma kota
+ * al, la, ma, ko, ot, ta
+ */
+public class p12 {
+	static class Elem{
+		char c1,c2;
+		Elem nast;
+		public Elem(Elem lista,char c1,char c2){
+			this.c1=c1;
+			this.c2=c2;
+			nast=lista;
+		}
+		public static Elem dodaj(Elem lista,char c1,char c2){
+			return new Elem(lista,c1,c2);
+		}
+		public static Elem wstaw(Elem lista,char c1,char c2){
+			if(lista==null)
+				return Elem.dodaj(lista, c1, c2);
+			
+			lista.nast=wstaw(lista.nast,c1,c2);
+			return lista;
+		}
+		public static void wypisz(Elem lista){
+			while(lista!=null){
+				System.out.print(""+lista.c1+lista.c2+", ");
+				lista=lista.nast;
+			}
+		}
+		public static void wypisz2(Elem lista){
+			if(lista.nast!=null)
+				wypisz2(lista.nast);
+			System.out.print(""+lista.c1+lista.c2+", ");
+		}
+		public static void usun(Elem lista) {
+			while(lista!=null){
+				Elem q=lista.nast;
+				lista.nast=null;
+				lista=q;
+			}
+		}
+	}
+	public static void main(String[] args) {
+		Elem lista=null;
+		String s;
+		Scanner in=new Scanner(System.in);
+		System.out.print(":");
+		s=in.nextLine();
+		char c1,c2;
+		for(int i=0;i<s.length()-1;i++){
+			c1=s.charAt(i);
+			c2=s.charAt(i+1);
+			if(c1!=' ' && c2!=' ')
+				lista=Elem.dodaj(lista, c1, c2);
+		}
+		Elem.wypisz(lista);
+		Elem.usun(lista);
+	}
+
+}
