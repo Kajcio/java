@@ -1,0 +1,75 @@
+import java.util.Scanner;
+
+/* D: (miasto, dl,szer), adl,aszer
+ * Sz: lista alfab
+ *     odl kazdego miasta od poz(adl,aszer)
+ */
+public class p13 {
+
+	public static class Elem{
+		String miasto;
+		int szer,dl;
+		Elem nast;
+		public Elem(Elem lista,String miasto,int szer,int dl){
+			this.miasto=miasto;
+			this.szer=szer;
+			this.dl=dl;
+			nast=lista;
+		}
+		public static Elem dodaj(Elem lista,String miasto,int szer,int dl){
+			return new Elem(lista, miasto, szer, dl);
+		}
+		public static Elem wstaw(Elem lista,String miasto,int szer,int dl){
+			if(lista==null)
+				return Elem.dodaj(lista, miasto, szer, dl);
+			if(lista.miasto.contains(miasto))
+				return Elem.dodaj(lista, miasto, szer, dl);
+			lista.nast=Elem.wstaw(lista.nast, miasto, szer, dl);
+			return lista;
+		}
+		public static void wypisz(Elem lista,int s,int d,int odlmax){
+			while(lista!=null){
+				if(odlmax==0 || odl(lista.szer,lista.dl,s,d)<odlmax)
+					System.out.printf("%-15s %3d %3d %5.2f\n",
+						lista.miasto,lista.szer,lista.dl,
+						odl(lista.szer,lista.dl,s,d));
+				lista=lista.nast;
+			}
+		}
+		public static void usun(Elem lista){
+			while(lista!=null){
+				Elem q=lista.nast;
+				lista.miasto=null;
+				lista.nast=null;
+				lista=q;
+			}
+		}
+	}
+	public static void main(String[] args) {
+		Elem lista=null;
+		lista=Elem.wstaw(lista, "Radom", 51, 61);
+		lista=Elem.wstaw(lista, "Warszawa", 2, 1);
+		lista=Elem.wstaw(lista, "Kielce", 53, 41);
+		lista=Elem.wstaw(lista, "Gdynia", 54, 29);
+		lista=Elem.wstaw(lista, "Szczecin", 55, 28);
+		lista=Elem.wstaw(lista, "Katowice", 49, 25);
+		lista=Elem.wstaw(lista, "Zakopane", 48, 23);
+		lista=Elem.wstaw(lista, "Pekin", 21, 22);
+		int szer,dl;
+		Scanner in=new Scanner(System.in);
+		System.out.print("szer=");
+		szer=in.nextInt();
+		System.out.print("dl=");
+		dl=in.nextInt();
+		Elem.wypisz(lista,szer,dl,0);
+		int odlmax;
+		System.out.print("odlmax=");
+		odlmax=in.nextInt();
+		Elem.wypisz(lista, szer, dl,odlmax);
+		Elem.usun(lista);
+	}
+	public static double odl(int szer, int dl, int s, int d) {
+		return Math.sqrt(Math.pow(szer-s, 2.0)+Math.pow(dl-d, 2.0));
+	}
+
+}
