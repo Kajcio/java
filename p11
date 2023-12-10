@@ -1,0 +1,56 @@
+import java.util.Scanner;
+
+/* D: D: String
+ * Sz: lista znakow
+ */
+public class p11 {
+	static class Elem{
+		char dana;
+		Elem nast;
+		public Elem(Elem lista,char x){
+			dana=x;
+			nast=lista;
+		}
+		public static Elem dodaj(Elem lista,char x){
+			return new Elem(lista,x);
+		}
+		public static Elem wstaw(Elem lista,char x){
+			if(lista==null)
+				return Elem.dodaj(lista, x);
+			if(lista.dana<x)
+				return Elem.dodaj(lista, x);
+			lista.nast=wstaw(lista.nast,x);
+			return lista;
+		}
+		public static void wypisz(Elem lista){
+			while(lista!=null){
+				System.out.print(lista.dana+", ");
+				lista=lista.nast;
+			}
+		}
+		public static void wypisz2(Elem lista){
+			if(lista.nast!=null)
+				wypisz2(lista.nast);
+			System.out.print(lista.dana+", ");
+		}
+		public static void usun(Elem lista) {
+			while(lista!=null){
+				Elem q=lista.nast;
+				lista.nast=null;
+				lista=q;
+			}
+		}
+	}
+	public static void main(String[] args) {
+		Elem lista=null;
+		String s;
+		Scanner in=new Scanner(System.in);
+		System.out.print(":");
+		s=in.nextLine();
+		for(int i=0;i<s.length();i++)
+			lista=Elem.dodaj(lista, s.charAt(i));
+		Elem.wypisz(lista);
+		Elem.usun(lista);
+	}
+
+}
