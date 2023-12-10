@@ -1,0 +1,92 @@
+
+public class p09 {
+
+	public static class GElem{
+		String nazw;
+		GElem gnast;
+		Elem nast;
+		public GElem(String imie,String nazw,GElem glista){
+			this.nazw=nazw;
+			gnast=glista;
+			nast=Elem.wstaw(imie, null);
+		}
+		public static GElem dodaj(String imie,String nazw,GElem glista){
+			GElem q=new GElem(imie,nazw,glista);
+			return q;
+		}
+		public static GElem wstaw(String imie,String nazw,GElem glista){
+			if(glista==null)
+				return GElem.dodaj(imie, nazw, glista);
+			if(nazw.compareTo(glista.nazw)<0)
+				return GElem.dodaj(imie, nazw, glista);
+			if(nazw.compareTo(glista.nazw)==0){
+				glista.nast=Elem.wstaw(imie, glista.nast);
+				return glista;
+			}
+			glista.gnast=GElem.wstaw(imie, nazw, glista.gnast);
+			return glista;
+		}
+		public static void wypisz(GElem glista){
+			while(glista!=null){
+				System.out.println(glista.nazw+":");
+				Elem.wypisz(glista.nast);
+				glista=glista.gnast;
+			}
+		}
+		public static void usun(GElem glista){
+			while(glista!=null){
+				GElem q=glista.gnast;
+				glista.nazw=null;
+				Elem.usun(glista.nast);
+				glista.nast=null;
+				glista=q;
+			}
+		}
+	}
+	public static class Elem{
+		String imie;
+		Elem nast;
+		public Elem(String imie,Elem lista){
+			this.imie=imie;
+			nast=lista;
+		}
+		public static Elem dodaj(String imie,Elem lista){
+			Elem q=new Elem(imie,lista);
+			return q;
+		}
+		public static Elem wstaw(String imie,Elem lista){
+			if(lista==null)
+				return Elem.dodaj(imie, lista);
+			if(imie.compareTo(lista.imie)<0)
+				return Elem.dodaj(imie, lista);
+			lista.nast=Elem.wstaw(imie,lista.nast);
+			return lista;
+		}
+		public static void wypisz(Elem lista){
+			while(lista!=null){
+				System.out.println("  "+lista.imie);
+				lista=lista.nast;
+			}
+		}
+		public static void usun(Elem lista){
+			while(lista!=null){
+				Elem q=lista.nast;
+				lista.imie=null;
+				lista.nast=null;
+				lista=q;
+			}
+		}
+	}
+	public static void main(String[] args) {
+		GElem glista=null;
+		glista=GElem.wstaw("Jan","Kowalski",glista);
+		glista=GElem.wstaw("Adam","Nowak",glista);
+		glista=GElem.wstaw("Zenon","Malinowski",glista);
+		glista=GElem.wstaw("Bogdan","Nowak",glista);
+		glista=GElem.wstaw("Czesio","Kowalski",glista);
+		glista=GElem.wstaw("Piotr","Kowalski",glista);
+		GElem.wypisz(glista);
+		GElem.usun(glista);
+	}
+
+}
